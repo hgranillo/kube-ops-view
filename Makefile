@@ -17,8 +17,8 @@ test:
 	tox
 
 appjs:
-	docker run $(TTYFLAGS) -u $$(id -u) -v $$(pwd):/workdir -w /workdir/app node:9.11-alpine npm install
-	docker run $(TTYFLAGS) -u $$(id -u) -v $$(pwd):/workdir -w /workdir/app node:9.11-alpine npm run build
+	docker run $(TTYFLAGS) -v $$(pwd):/workdir -w /workdir/app node:9.11-alpine npm install
+	docker run $(TTYFLAGS) -v $$(pwd):/workdir -w /workdir/app node:9.11-alpine npm run build
 
 docker: appjs scm-source.json
 	docker build --build-arg "VERSION=$(VERSION)" -t "$(IMAGE):$(TAG)" .
@@ -32,4 +32,3 @@ mock:
 
 scm-source.json: .git
 	@echo '{"url": "git:$(GITURL)", "revision": "$(GITHEAD)", "author": "$(USER)", "status": "$(GITSTATUS)"}' > scm-source.json
-
